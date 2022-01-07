@@ -1,0 +1,19 @@
+---
+title: "snotelr"
+author: "Tao"
+date: "1/7/2022"
+output: html_document
+---
+
+```{r}
+#install.packages("snotelr")
+library("snotelr")
+```
+
+# Bogus Basin	978
+```{r}
+df <- snotel_download(site_id = c(978), internal = TRUE)
+# list a few first rows
+head(df)
+```
+
