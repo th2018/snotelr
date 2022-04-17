@@ -8,6 +8,10 @@ output: html_document
 ```{r}
 #install.packages("snotelr")
 library("snotelr")
+#install.packages("cropgrowdays")
+library("cropgrowdays")
+library("ggplot2")
+library("foreign")
 ```
 
 ```{r}
@@ -34,6 +38,27 @@ df$date<-as.POSIXct( df$date,format="%Y-%m-%d")
 plot(df$date ,df$snow_water_equivalent )
 summary(df$snow_water_equivalent)
 plot(df[df$date>= as.POSIXct( "2022-04-09",format="%Y-%m-%d" ) ,]$date, df[df$date>= as.POSIXct( "2022-04-09",format="%Y-%m-%d" ) ,]$snow_water_equivalent)
+
+```
+
+```{r}
+b<-read.csv("C:/Users/taohuang/Downloads/Bogus_Basin.csv")
+b$date<-as.POSIXct(b$date, format="%m/%d/%Y")
+
+
+```
+
+```{r}
+plot(b$doy ,b$X2022, xlab = "day of water year")
+par(new=T)
+plot(b$doy ,b$Median...91..20. , xlab = "day of water year")
+```
+
+```{r}
+ggplot( b, aes(doy)) + 
+  geom_line(aes(y =  X2022 ), color="Red" )+ 
+  geom_line(aes(y =  b$Median...91..20.  ))+ ylab("Snow Water Equivalent (in.)")+xlab("Day of Water Year")
+
 
 ```
 
