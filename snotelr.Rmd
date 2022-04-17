@@ -17,12 +17,23 @@ snotel_explorer()
 
 # Bogus Basin	978
 ```{r}
-df <- snotel_download(site_id = c(978), internal = TRUE)
+df <- snotel_download(site_id = c(978) , internal = TRUE
+                      )
 # list a few first rows
 head(df)
 ```
 
 ```{r}
-plot(df$date,df$snow_water_equivalent)
+df$date<-as.POSIXct( df$date,format="%Y-%m-%d")
+
+
+```
+
+
+```{r}
+plot(df$date ,df$snow_water_equivalent )
+summary(df$snow_water_equivalent)
+plot(df[df$date>= as.POSIXct( "2022-04-09",format="%Y-%m-%d" ) ,]$date, df[df$date>= as.POSIXct( "2022-04-09",format="%Y-%m-%d" ) ,]$snow_water_equivalent)
+
 ```
 
