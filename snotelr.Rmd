@@ -10,10 +10,19 @@ output: html_document
 library("snotelr")
 ```
 
+```{r}
+snotel_explorer()
+```
+
+
 # Bogus Basin	978
 ```{r}
 df <- snotel_download(site_id = c(978), internal = TRUE)
 # list a few first rows
 head(df)
+```
+
+```{r}
+plot(df$date,df$snow_water_equivalent)
 ```
 
