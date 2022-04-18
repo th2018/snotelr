@@ -8,10 +8,12 @@ output: html_document
 ```{r}
 #install.packages("snotelr")
 library("snotelr")
-#install.packages("cropgrowdays")
-library("cropgrowdays")
+
+
 library("ggplot2")
 library("foreign")
+#install.packages("cropgrowdays")
+library("cropgrowdays")
 ```
 
 ```{r}
@@ -42,23 +44,29 @@ plot(df[df$date>= as.POSIXct( "2022-04-09",format="%Y-%m-%d" ) ,]$date, df[df$da
 ```
 
 ```{r}
-b<-read.csv("C:/Users/taohuang/Downloads/Bogus_Basin.csv")
+b<-read.csv("Bogus_Basin.csv")
 b$date<-as.POSIXct(b$date, format="%m/%d/%Y")
-
-
+colnames(b)<-c(colnames(b)[1:23],"Year 2022",colnames(b)[25:30], "Median ('91-'20)",colnames(b)[32:34])
+head(b)
 ```
 
 ```{r}
-plot(b$doy ,b$X2022, xlab = "day of water year")
+plot(b$doy ,b$`Year 2022` , xlab = "day of water year")
 par(new=T)
-plot(b$doy ,b$Median...91..20. , xlab = "day of water year")
+plot(b$doy ,b$`Median ('91-'20)`  , xlab = "day of water year")
 ```
 
 ```{r}
 ggplot( b, aes(doy)) + 
-  geom_line(aes(y =  X2022 ), color="Red" )+ 
-  geom_line(aes(y =  b$Median...91..20.  ))+ ylab("Snow Water Equivalent (in.)")+xlab("Day of Water Year")
+  geom_line(aes(y =  `Year 2022` ), color="Red" )+
+  geom_line(aes(y =    `Median ('91-'20)`  ))+ ylab("Snow Water Equivalent (in.)")+xlab("Day of Water Year")
+```
 
 
+```{r}
+ggplot(  ) + 
+  geom_line(data=b,aes(x= doy, y =  `Year 2022` ,colour="2022")  )+
+  geom_line(data=b,aes(x= doy, y =    `Median ('91-'20)`  ,colour="Median ('91-'20)"))+ ylab("Snow Water Equivalent (in.)")+xlab("Day of Water Year")+
+  scale_color_manual(name = " ", values = c("2022" = "Red", "Median ('91-'20)" = "Blue"))+ggtitle( "Bogus Basin SNOTEL")
 ```
 
