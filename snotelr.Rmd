@@ -8,33 +8,65 @@ output: html_document
 ```{r}
 #install.packages("snotelr")
 library("snotelr")
-
-
 library("ggplot2")
 library("foreign")
 #install.packages("cropgrowdays")
 library("cropgrowdays")
+library("dplyr")
 ```
 
 ```{r}
 snotel_explorer()
 ```
 
-
 # Bogus Basin	978
 ```{r}
-df <- snotel_download(site_id = c(978) , internal = TRUE
-                      )
-# list a few first rows
-head(df)
+max_swe_df<-data.frame(id=123456, year="1234",max_swe=123456789)
+max_swe_df
+
+id=978
+ Sys.time()
+  df <- snotel_download(site_id = id , internal = TRUE)
+  df$date<-as.POSIXct( df$date,format="%Y-%m-%d")
+  df$year<-format( df$date, "%Y")
+  max_swe<-df %>%
+    group_by(year) %>%
+    summarize(max_swe=max(snow_water_equivalent))
+  max_swe$id<-id
+  max_swe_df<-rbind(max_swe_df,max_swe)
+  head(df)
+  Sys.time()
 ```
 
 ```{r}
-df$date<-as.POSIXct( df$date,format="%Y-%m-%d")
+west_mnt_snotel<-read.dbf("C:/Users/taohuang/Documents/Tao/Data/norwest/west_mnt_snotel.dbf")
+west_mnt_snotel$GAGE_ID<-as.character(west_mnt_snotel$GAGE_ID)
+load("C:/Users/taohuang/Downloads/IDWQ_PAHydroML-main/meanAugT_idmt_df.Rdata")
 
-
+west_mnt_snotel_id<-unique(west_mnt_snotel[west_mnt_snotel$GAGE_ID %in% meanAugT_df$site_no ,]$SNOTEL_ID)
+west_mnt_snotel_id<-west_mnt_snotel_id[west_mnt_snotel_id>0]
 ```
 
+
+```{r}
+max_swe_df<-data.frame(id=123456, year="1234",max_swe=123456789)
+max_swe_df
+for (id in west_mnt_snotel_id) {
+  Sys.time()
+  df <- snotel_download(site_id = id , internal = TRUE)
+  df$date<-as.POSIXct( df$date,format="%Y-%m-%d")
+  df$year<-format( df$date, "%Y")
+  max_swe<-df %>%
+    group_by(year) %>%
+    summarize(max_swe=max(snow_water_equivalent))
+    max_swe$id<-id
+  max_swe_df<-rbind(max_swe_df,max_swe)
+  head(df)
+  Sys.time()
+}
+
+save(max_swe_df,file="max_swe_df.Rdata")
+```
 
 ```{r}
 plot(df$date ,df$snow_water_equivalent )
