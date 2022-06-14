@@ -5,21 +5,31 @@ date: "1/7/2022"
 output: html_document
 ---
 
+The SNOTEL network is composed of over 800 automated data collection sites located in remote, high-elevation mountain watersheds in the western U.S. 
+
+# load packages
 ```{r}
 #install.packages("snotelr")
 library("snotelr")
 library("ggplot2")
 library("foreign")
+library("dplyr")
 #install.packages("cropgrowdays")
 library("cropgrowdays")
-library("dplyr")
 ```
+
+```{r}
+#list site information
+site_meta_data <- snotel_info()
+head(site_meta_data)
+```
+
 
 ```{r}
 snotel_explorer()
 ```
 
-# Bogus Basin	978
+# Bogus Basin	 (id=978)
 ```{r}
 max_swe_df<-data.frame(id=123456, year="1234",max_swe=123456789)
 max_swe_df
